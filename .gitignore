@@ -1,0 +1,3 @@
+# Temporary paper drop-zone files placed directly under daily/.
+# Per-run source PDFs live in daily/YYYY-MM-DD--slug/source.pdf and remain trackable.
+daily/*.pdf
