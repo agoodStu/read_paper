@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cognitive Modeling Using Artificial Intelligence | 原文精准翻译</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --paper: #ffffff;
+      --ink: #17202c;
+      --muted: #5e6877;
+      --line: #d8dee8;
+      --teal: #0f766e;
+      --blue: #255fd6;
+      --rust: #a84d08;
+      --max: 1180px;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
+      line-height: 1.72;
+      letter-spacing: 0;
+    }
+    a { color: inherit; text-underline-offset: .18em; }
+    .bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(246, 247, 249, .94);
+      backdrop-filter: blur(14px);
+    }
+    .bar-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand {
+      min-width: 0;
+      font-weight: 850;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .view {
+      display: grid;
+      grid-template-columns: repeat(3, 62px);
+      gap: 2px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #edf1f6;
+      flex: 0 0 auto;
+    }
+    .view button {
+      border: 0;
+      border-radius: 6px;
+      min-height: 34px;
+      background: transparent;
+      color: #3a4656;
+      font: 800 .86rem/1 "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
+      cursor: pointer;
+    }
+    .view button[aria-pressed="true"] {
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 1px 4px rgba(15, 23, 42, .13);
+    }
+    header.hero {
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff, #f3f6f8);
+    }
+    .hero-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 44px 20px 36px;
+    }
+    .kicker {
+      margin: 0 0 10px;
+      color: var(--teal);
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: .88rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      line-height: 1.06;
+      letter-spacing: 0;
+    }
+    .sub {
+      max-width: 900px;
+      margin: 18px 0 0;
+      color: #3d4858;
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+    .meta span, .meta a {
+      padding: 5px 10px;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+    main {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 30px 20px 80px;
+    }
+    .note {
+      padding: 18px 20px;
+      border-left: 5px solid var(--rust);
+      border-radius: var(--radius);
+      background: #fff;
+      color: #344052;
+      margin-bottom: 26px;
+    }
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    .toc a {
+      display: block;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      text-decoration: none;
+      color: #263243;
+      font-weight: 750;
+    }
+    section {
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+    }
+    h2 {
+      margin: 0 0 16px;
+      font-size: clamp(1.55rem, 2.4vw, 2.35rem);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 28px 0 12px;
+      color: var(--teal);
+      font-size: 1.22rem;
+      line-height: 1.25;
+    }
+    .pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+      margin: 14px 0;
+      align-items: stretch;
+    }
+    .cell {
+      min-width: 0;
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+    .label {
+      margin: 0 0 8px;
+      font-size: .74rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .en .label { color: var(--blue); }
+    .zh .label { color: var(--teal); }
+    .cell p { margin: 0; }
+    .cell p + p { margin-top: 10px; }
+    .cell ul {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+    .cell li + li { margin-top: 6px; }
+    .en {
+      font-family: Arial, "Noto Sans SC", sans-serif;
+      color: #263243;
+    }
+    .zh {
+      color: #182230;
+    }
+    .caption {
+      font-size: .94rem;
+      color: var(--muted);
+    }
+    body[data-view="zh"] .en,
+    body[data-view="en"] .zh { display: none; }
+    body[data-view="zh"] .pair,
+    body[data-view="en"] .pair { grid-template-columns: minmax(0, 820px); }
+    .license {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+    @media (max-width: 820px) {
+      .bar-inner { display: block; }
+      .view {
+        margin-top: 10px;
+        width: 100%;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .toc { grid-template-columns: 1fr; }
+      .pair,
+      body[data-view="zh"] .pair,
+      body[data-view="en"] .pair {
+        grid-template-columns: 1fr;
+      }
+      .meta span, .meta a { width: 100%; }
+    }
+  </style>
+</head>
+<body data-view="both">
+  <div class="bar">
+    <div class="bar-inner">
+      <div class="brand">Cognitive Modeling Using Artificial Intelligence | 原文精准翻译</div>
+      <div class="view" aria-label="Language view">
+        <button type="button" data-view="both" aria-pressed="true">中英</button>
+        <button type="button" data-view="zh" aria-pressed="false">中文</button>
+        <button type="button" data-view="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="kicker">Original-aligned translation / 论文原文对照翻译</p>
+      <h1>用人工智能进行认知建模</h1>
+      <p class="sub">A paragraph-aligned bilingual translation of the article body. The translation keeps the original argumentative order, technical terms, citations, and cautionary claims rather than turning the article into a summary.</p>
+      <div class="meta">
+        <span>Michael C. Frank; Noah D. Goodman</span>
+        <span>Annual Review of Psychology, 2026, 77:543-566</span>
+        <a href="source.pdf">Source PDF</a>
+        <a href="https://doi.org/10.1146/annurev-psych-030625-040748">DOI</a>
+        <span>License: CC BY 4.0</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="note">
+      本页翻译论文主文（标题、摘要、正文、图注、侧栏、结论）。参考文献列表不逐条翻译；请在原 PDF 中查看。译文采取学术精确风格：术语一致、段落对齐、尽量保留原文推理顺序。
+    </div>
+
+    <nav class="toc" aria-label="Table of contents">
+      <a href="#front">标题 / 摘要</a>
+      <a href="#intro">Introduction</a>
+      <a href="#models">Models of Mind</a>
+      <a href="#mapping">Mapping Between Models and Humans</a>
+      <a href="#other">Other Contributions</a>
+      <a href="#challenges">Challenges and Conclusion</a>
+    </nav>
+
+    <section id="front">
+      <h2>标题、关键词与摘要</h2>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p><strong>Cognitive Modeling Using Artificial Intelligence</strong></p><p>Michael C. Frank and Noah D. Goodman</p></div>
+        <div class="cell zh"><p class="label">中文</p><p><strong>用人工智能进行认知建模</strong></p><p>Michael C. Frank 与 Noah D. Goodman</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p><strong>Keywords</strong>: cognitive modeling, artificial intelligence, psychological theory</p></div>
+        <div class="cell zh"><p class="label">中文</p><p><strong>关键词</strong>：认知建模、人工智能、心理学理论</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Recent progress in artificial intelligence (AI) is exciting, but can AI models tell us about the human mind? AI models have a long history of being used as theoretical artifacts in cognitive science, but one key difference in the current generation of models is that they are stimulus computable, meaning that they can operate over stimuli that are similar to those experienced by people. This advance creates important opportunities for deepening our understanding of the human mind. We argue here that the most exciting of these is the use of AI models as cognitive models, wherein they are trained using human-scale input data and evaluated using careful experimental probes. Such cognitive models constitute a substantial advance that can inform theories of human intelligence by helping to explain and predict behavior.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>人工智能（AI）近期的进展令人振奋，但 AI 模型能告诉我们有关人类心智的事情吗？AI 模型作为理论人工物被用于认知科学，已有很长历史；但当前这一代模型有一个关键差异：它们是“刺激可计算的”（stimulus computable），也就是说，它们能够处理与人类所经历的刺激相似的刺激。这个进展为深化我们对人类心智的理解创造了重要机会。我们在本文中主张，其中最令人兴奋的机会，是把 AI 模型用作认知模型：这些模型用人类尺度的输入数据进行训练，并用严谨的实验探针进行评估。这样的认知模型构成了一项实质性进展，因为它们可以通过帮助解释和预测行为，来推进关于人类智能的理论。</p></div>
+      </div>
+    </section>
+
+    <section id="intro">
+      <h2>Introduction / 引言</h2>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>The promise of cognitive science is to provide an explanatory and predictive understanding of the behavior of minds. Since its inception, cognitive science also has been concerned with the intersection between natural and artificial intelligence (AI). For example, an editorial in the first issue of the journal <em>Cognitive Science</em> ends noting the “excitement surrounding the paradigm shift in the study of cognition made possible by the synthesis of artificial intelligence, psychology, and linguistics” (Collins 1977, p. 2). This synthesis has only accelerated in the 48 years since. In this review, we explore the theoretical opportunities afforded by new AI models. We argue that these can be used as models of mind—scientific artifacts to predict and explain human cognition—especially when they are trained using human-like input data and evaluated using experimental probes parallel to those used in human experiments.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>认知科学的希望，在于对心智行为提供既能解释、又能预测的理解。自诞生以来，认知科学也一直关注自然智能与人工智能（AI）的交汇。例如，《Cognitive Science》创刊号的一篇社论在结尾提到，“人工智能、心理学和语言学的综合，使认知研究的范式转变成为可能，由此带来的兴奋”（Collins 1977，第 2 页）。此后 48 年里，这种综合只是在加速。本文探讨新 AI 模型带来的理论机会。我们认为，这些模型可以被用作心智模型，即用于预测和解释人类认知的科学人工物；尤其当它们使用类人的输入数据进行训练，并用与人类实验平行的实验探针进行评估时，尤其如此。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Recent years have brought immense progress in AI as an independent field of study (Goodfellow et al. 2016). One important milestone was the revival of deep neural networks and the striking improvements in image recognition that they yielded when combined with a large data set of labeled images (Krizhevsky et al. 2012). This milestone was soon followed by remarkable successes in reinforcement learning and unsupervised language modeling (Brown et al. 2020, Silver et al. 2016). Public attention was captured especially by the launch of ChatGPT, an interactive dialogue interface to a predictive language model, in late 2022. AI is becoming integrated into the broader software ecosystem in which we increasingly live, mediated by smartphones, computers, tablets, watches, glasses, and other devices.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>近年来，AI 作为一个独立研究领域取得了巨大进展（Goodfellow 等，2016）。一个重要里程碑，是深度神经网络的复兴；当它们与大规模标注图像数据集结合时，图像识别能力出现了惊人提升（Krizhevsky 等，2012）。紧随其后的是强化学习和无监督语言建模的显著成功（Brown 等，2020；Silver 等，2016）。尤其是 2022 年底 ChatGPT 的发布，吸引了公众注意；ChatGPT 是预测性语言模型的交互式对话接口。AI 正在整合进更广泛的软件生态系统，而我们越来越多地生活在这个生态中，经由智能手机、计算机、平板、手表、眼镜以及其他设备与之相连。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>It is not immediately obvious that advances in AI as a product—or even as a technical artifact—will yield scientific advances in the understanding of the mind. The same editorial in the first issue of <em>Cognitive Science</em> warns against submitting “descriptions of intelligent systems that do not provide any insight into human processing” (Collins 1977, p. 2). And yet modern AI models exhibit so many human-like behaviors that their potential implications for scientific understanding loom large over cognitive science.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>AI 作为产品，甚至作为技术人工物的进展，并不会显然自动带来关于心智理解的科学进展。同一篇《Cognitive Science》创刊号社论曾警告，不要提交“对智能系统的描述，而这些描述并不提供任何关于人类加工过程的洞见”（Collins 1977，第 2 页）。然而，现代 AI 模型表现出如此多类人行为，以至于它们对科学理解可能意味着什么，已经成为笼罩认知科学的一大问题。</p></div>
+      </div>
+
+      <h3>Sidebar: Modern AI Models / 侧栏：现代 AI 模型</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Modern AI models are typically deep neural networks: sets of simulated neurons connected to each other through learnable weights (Goodfellow et al. 2016, LeCun et al. 2015). The units of these networks diverge substantially from biological neurons, which have more complex temporal dynamics and different learning rules (Marblestone et al. 2016). Instead, neural networks consist of millions or billions of units whose connection weights can be adjusted to optimize a given learning objective.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>现代 AI 模型通常是深度神经网络：由一组模拟神经元组成，这些神经元通过可学习的权重彼此连接（Goodfellow 等，2016；LeCun 等，2015）。这些网络单元与生物神经元有很大差异；生物神经元具有更复杂的时间动态和不同的学习规则（Marblestone 等，2016）。神经网络则由数百万乃至数十亿个单元构成，这些单元之间的连接权重可以被调整，以优化给定的学习目标。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Large language models (LLMs) have at their core a simple objective: next word prediction. That is, given a string of words w1 ... wn−1, their learning objective is to make the most precise prediction about wn. The astonishing observation about LLMs is that complex behaviors emerge when this objective is applied to train very large models on huge amounts of data (Brown et al. 2020).</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>大型语言模型（LLM）的核心目标很简单：预测下一个词。也就是说，给定一个词序列 w1 ... wn−1，它们的学习目标是尽可能精确地预测 wn。关于 LLM 令人惊讶的观察是：当这一目标被用于在海量数据上训练非常大的模型时，复杂行为会涌现出来（Brown 等，2020）。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>The vast majority of the most performant AI models are based on the transformer architecture (Vaswani et al. 2017), which uses a mechanism known as attention to learn what aspects of a sequence to upweight to be most successful in optimizing its objective. During pretraining, the neural network’s weights are adjusted, typically via backpropagation, to minimize the learning objective. In many systems, subsequent fine tuning can be performed to maximize the network’s performance on a particular task, for example, producing helpful answers to questions.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>绝大多数性能最强的 AI 模型都基于 transformer 架构（Vaswani 等，2017）。这种架构使用一种称为注意力（attention）的机制，学习在一个序列中哪些方面应被赋予更高权重，才能最成功地优化其目标。在预训练期间，神经网络的权重通常通过反向传播被调整，以最小化学习目标。在许多系统中，随后还可以进行微调，使网络在特定任务上的表现最大化，例如对问题生成有帮助的回答。</p></div>
+      </div>
+
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>With the remarkable growth in large language models in particular, there has been an explosion both of cognitive science investigations of these models and of debate about whether and how these models can be informative about the human mind (Blank 2023, McGrath et al. 2024, Ong 2024, Shah & Varma 2025, van Rooij et al. 2024). This debate has been marked by extreme positions, from the suggestion that AI models solve long-standing puzzles about human cognition (Contreras Kallens et al. 2023, Piantadosi 2024) to the counterclaim that these models are wholly uninformative about cognition (Cuskley et al. 2024, Dupre 2021, Katzir 2023). Many discussions of the utility of AI echo themes of previous debates about the role of computational models in cognitive science as well as discussions of the role of scientific models more generally.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>尤其随着大型语言模型的显著增长，认知科学中关于这些模型的研究激增，同时关于这些模型是否以及如何能为人类心智提供信息的争论也激增（Blank 2023；McGrath 等，2024；Ong 2024；Shah 与 Varma 2025；van Rooij 等，2024）。这场争论呈现出极端立场：一端认为 AI 模型解决了人类认知中的长期谜题（Contreras Kallens 等，2023；Piantadosi 2024），另一端则反驳说这些模型对认知完全没有信息量（Cuskley 等，2024；Dupre 2021；Katzir 2023）。许多关于 AI 有用性的讨论，都呼应了过去关于计算模型在认知科学中作用的争论，也呼应了更一般意义上关于科学模型作用的讨论。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>We argue here that modern AI models provide a remarkable theoretical opportunity for psychology and cognitive science, as well as neuroscience, though discussion of these applications is outside our scope. The theoretical use of these models is not fundamentally different from the use of previous computational formalisms such as the first generation of neural network models or, more recently, Bayesian models. Yet the increased capabilities of new models open up exciting possibilities.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>我们在本文中主张，现代 AI 模型为心理学和认知科学提供了非凡的理论机会；它们对神经科学也同样如此，尽管这些应用不在本文讨论范围内。这些模型的理论用途，与以往计算形式体系的用途并没有根本不同，例如第一代神经网络模型，或更近来的贝叶斯模型。然而，新模型能力的提升，打开了令人兴奋的可能性。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Previous eras of modeling have been forced to schematize their inputs or restrict their scope to the simplest perceptual inputs. In contrast, modern AI models are stimulus computable, meaning that they can operate over text, audio, images, and sometimes even videos—that is, rich representations of the perceptual inputs to humans (Carvalho & Lampinen 2025). Also, these models can be evaluated both by their behaviors—for example, their generation of text or other modalities—and through readouts of their internal states via mechanistic interpretability tools. These developments create new opportunities for the alignment of models and human systems of interest such as language processing, visual perception, and reasoning.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>以往各个建模时代都不得不把输入图式化，或者把研究范围限制在最简单的感知输入上。相反，现代 AI 模型是“刺激可计算的”，也就是说，它们能够处理文本、音频、图像，有时甚至视频——这些都是人类感知输入的丰富表征（Carvalho 与 Lampinen 2025）。此外，这些模型既可以通过其行为来评估，例如生成文本或其他模态内容，也可以通过机制可解释性工具读取其内部状态来评估。这些发展，为模型与人类目标系统之间的对齐创造了新机会，例如语言加工、视觉知觉和推理。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>In this review, we describe the potential for using stimulus computable models as models of mind—scientific artifacts to help us understand cognition. Our primary focus is on LLMs, but the points we make generally apply to vision-language models and vision models as well. Cognitive models are only as good as their mapping to the human system of interest, and so we discuss assumptions underlying model training and evaluation. We contrast the cognitive modeling approach with alternative uses of AI models for advancing our theoretical understanding, including their use as machine research assistants, human behavior simulators, and general reference points for the nature of intelligence. We end by considering some limitations of the current models that point the way toward future theoretical opportunities.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>在这篇综述中，我们描述将刺激可计算模型用作心智模型的潜力，也就是将其作为帮助我们理解认知的科学人工物。我们的主要焦点是 LLM，但我们提出的观点通常也适用于视觉-语言模型和视觉模型。认知模型的质量，取决于它们与相关人类系统之间映射的质量；因此，我们讨论模型训练和评估背后的假设。我们将认知建模方法与 AI 模型推进理论理解的其他用途作对比，包括把它们用作机器研究助理、人类行为模拟器，以及关于智能本质的一般参照点。最后，我们讨论当前模型的一些局限，这些局限也指向未来的理论机会。</p></div>
+      </div>
+    </section>
+
+    <section id="models">
+      <h2>Models of Mind / 心智模型</h2>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Throughout the sciences, mathematical tools are used to create idealized representations of physical systems. Often the goal is a statement of how different entities interact quantitatively. For example, in classical mechanics, a set of equations are written that allow their users to make predictions about the behaviors of physical systems, subject to some constraints, for example, on the scale of the objects being predicted.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>在各门科学中，数学工具被用来创造物理系统的理想化表征。通常，其目标是陈述不同实体如何以定量方式相互作用。例如，在经典力学中，人们写下一组方程，使使用者能够在某些约束条件下预测物理系统的行为，例如被预测对象的尺度限制。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Theories are then instantiated in models, artifacts that can be manipulated. Scientific models can be computational artifacts in which the manipulations are via simulation, but they can also be physical artifacts, such as a computer simulation of an object falling or a toy car in a small wind tunnel. They create a causally accessible version of a system that can be perturbed—for example, by modifying the weight of the object in the simulation or the design of the toy car. They also allow explanations of the behavior of systems. Classical mechanics as a theory allows us to create a model of a system, say, with a point mass falling on a rope. This type of model allows explanations: the rope broke because of the force the falling climber exerted on it; had the fall been shorter or the climber lighter, it would have held. How does this process play out in psychology and cognitive science?</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>理论随后被实例化为模型，也就是可被操纵的人工物。科学模型可以是计算人工物，操纵通过模拟完成；也可以是物理人工物，例如一个物体下落的计算机模拟，或小型风洞中的玩具车。模型创造了一个因果上可接近的系统版本，可以被扰动，例如修改模拟中物体的重量，或修改玩具车的设计。模型也允许我们解释系统行为。以经典力学为例，理论使我们能够创建一个系统模型，例如一个点质量落在绳索上。这类模型允许解释：绳子断裂，是因为坠落攀登者施加在绳索上的力；如果坠落距离更短，或攀登者更轻，绳子本可以承受。那么，这一过程在心理学和认知科学中如何展开？</p></div>
+      </div>
+
+      <h3>Frameworks, Theories, and Models / 框架、理论与模型</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>In psychology and cognitive science, the situation is more complicated than in the physical sciences. While the ultimate goal is still prediction and explanation, the set of candidate entities has been more variable. Many different things get called theories in psychology, and many different kinds of things get called models. These practices can lead to considerable confusion. In some cases, theory development focuses simply on defining the entities, known as constructs, whose relations are to be studied. One of the most central debates in psychology, for example, is whether intelligence is a single construct or not.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>在心理学和认知科学中，情况比物理科学更复杂。虽然最终目标仍然是预测和解释，但候选实体的集合更加多变。在心理学中，许多不同的东西都被称为理论，许多不同种类的东西也都被称为模型。这些做法会造成相当大的混乱。在某些情况下，理论发展的焦点只是定义那些关系将被研究的实体，即所谓构念（constructs）。例如，心理学中最核心的争论之一，就是智力是否是一个单一构念。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>We use the term “frameworks” to describe general ways of looking at a domain or problem that do not themselves lead to testable predictions. Bronfenbrenner’s ecological systems theory is an example: it describes the interconnectedness of many aspects of children’s development, from family context to school, neighborhood, and culture. Although it is called a theory, it is really a framework, since it does not make specific empirical predictions. It cannot be falsified in the Popperian sense: there are no observations that would convince a developmental scientist that a child’s development is not embedded in context.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>我们使用“框架”（frameworks）一词，来描述看待某个领域或问题的一般方式；这些方式本身并不会导向可检验的预测。Bronfenbrenner 的生态系统理论就是一个例子：它描述儿童发展诸多方面之间的相互关联，从家庭情境到学校、社区和文化。虽然它被称为理论，但它实际上是一个框架，因为它并不作出具体的经验预测。它当然也不能在波普尔意义上被证伪：没有任何观察会使发展科学家相信，一个儿童的发展并非嵌入在情境之中。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>In contrast, a theory describes a set of causal relationships between possibly unobserved psychological constructs. Verbal theories may simply define directional relationships between variables—for example, that more responsive caregiving should lead to more secure attachment between the child and caregiver. Cashing this theory out into predictions about observable data requires many further, theory-laden definitions: what counts as responsive caregiving, and how secure attachment is measured. In practice, this often means creating an operationalization, a means to measure each variable within a particular study. For at least 50 years there have been calls for verbal theories to be translated into formal or computational models that provide the kind of prediction and explanation afforded by physical theories.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>相比之下，理论描述的是一组心理构念之间的因果关系，这些构念可能并不可直接观察。言语理论也许只是定义变量之间的方向性关系，例如更有回应性的照护应当导致儿童与照护者之间更安全的依恋。要把这一理论兑现为关于可观察数据的预测，还需要大量进一步的、带有理论负荷的定义：什么算作有回应性的照护，安全依恋又如何测量。在实践中，这通常意味着创建操作化定义，即在特定研究中测量每个变量的方法。至少 50 年来，人们一直呼吁将言语理论翻译成形式模型或计算模型，以提供类似物理理论那样的预测和解释。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>A model in psychology and cognitive science is an artifact that represents a target system, for example, visual working memory, word learning, or intuitive psychology. These models are almost always either simple formal descriptions, such as equations, or computational artifacts. These artifacts take inputs and perform some computation to produce an output. As with models throughout the sciences, they are models by virtue of their correspondence with the system of interest: the modeler selects aspects of a target system to represent as well as, often implicitly, what aspects of the target system not to represent.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>在心理学和认知科学中，模型是表征某个目标系统的人工物，例如视觉工作记忆、词汇学习或直觉心理学。这些模型几乎总是简单的形式描述（例如方程），或计算人工物。这些人工物接收输入，执行某种计算，并产生输出。与各门科学中的模型一样，它们之所以是模型，是因为它们与所关注的系统存在对应关系：建模者选择目标系统的某些方面来表征，同时也常常隐含地选择目标系统中哪些方面不被表征。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en caption"><p class="label">English figure caption</p><p><strong>Figure 1.</strong> A schematic depiction of a model-mechanism mapping between (a) a human learning system and (b) a cognitive model. Candidate model-mechanism mappings are pictured as mappings between representations but can also be in terms of input data, architecture, or learning objective.</p></div>
+        <div class="cell zh caption"><p class="label">中文图注</p><p><strong>图 1。</strong>人类学习系统（a）与认知模型（b）之间模型-机制映射的示意图。候选模型-机制映射在图中被画作表征之间的映射，但它们也可以是输入数据、架构或学习目标方面的映射。</p></div>
+      </div>
+
+      <h3>Model-Mechanism Mappings / 模型-机制映射</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Psychological systems can rarely be described via one or two simple equations; psychological processes typically operate over complex stimuli that the mind perceives or processes. Thus, computational models are often complex artifacts whose relationship to the target human system of interest must be explicitly defined by the modeler. This correspondence between target system and model is sometimes referred to as a model-mechanism mapping, or 3M.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>心理系统很少能用一两个简单方程来描述；心理过程通常作用于心智所感知或加工的复杂刺激。因此，计算模型往往是复杂人工物，它们与所关注的人类目标系统之间的关系，必须由建模者明确界定。目标系统与模型之间的这种对应，有时被称为模型-机制映射（model-mechanism mapping，3M）。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Exactly what counts as a mechanism is controversial and often differs between cognitive science and neuroscience. For our purposes, we simply mean that there is some mapping between the structure of the model and the structure of the target system, beyond an expectation that the behaviors of both should correspond. This mapping could be a correspondence between aspects of the model’s internal states and posited mental representations. It could also be a correspondence between aspects of the model’s training data and human training data, abstracting over the model internals, or between model objectives and human motivational signals. Many of these mappings can be productive; the key is that they are stated explicitly.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>究竟什么算作机制，是一个很有争议的问题，而且在认知科学和神经科学之间常常不同。就本文而言，我们只是指：除了期待二者行为对应之外，模型结构与目标系统结构之间还存在某种映射。这种映射可以是模型内部状态的某些方面与被假定的心理表征之间的对应；也可以是在抽象掉模型内部的情况下，模型训练数据的特定方面与人类训练数据之间的对应；还可以是模型目标与人类动机信号之间的对应。我们预期许多这类映射都可能富有成效；关键在于，它们必须被明确陈述出来。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>To make the discussion concrete, consider computational models of naive psychology. Naive psychology is, roughly, the idea that people represent the beliefs and desires of other people and use these representations to reason about observed actions. These representations together constitute an intuitive theory in which inferences can be made about observed patterns of data from other agents. This reasoning process is called a theory of mind, because it allows people to reason about the causes of others’ actions. Although initial theorizing about naive psychology was verbal, its complexity suggested that formalization would be important for making more precise predictions.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>为了使讨论具体化，可以考虑直觉心理学（naive psychology）的计算模型。粗略地说，直觉心理学指的是：人们表征他人的信念和欲望，并使用这些表征来推理他们观察到的行动。这些表征共同构成一种直觉理论，使人能够根据来自其他行动者的、可观察的数据模式进行推断。这个推理过程被称为心智理论（theory of mind），因为它使人们能够推理他人行动的原因。尽管关于直觉心理学的最初理论化是言语性的，但这一理论的复杂性表明，为了作出更精确的预测，将其形式化非常重要。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Goodman et al. (2006) provided an early probabilistic cognitive model of naive psychology. In their model, probabilistic predictions could be made about observed actions on the basis of unobserved entities such as beliefs and desires. The model made an explicit mechanism mapping: specific variables in the model mapped directly to posited representations in the target system, such as beliefs and goals. However, the model took in only highly schematic representations of the world: binary variables for whether an object was in the box or basket, or whether an agent searched in the box or basket.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>Goodman 等人（2006）提出了一个早期的直觉心理学概率认知模型。在他们的模型中，可以基于信念和欲望等不可观察实体，对可观察行动作出概率预测。这个模型进行了明确的机制映射：模型中的特定变量直接映射到目标系统中被假定存在的表征，例如信念和目标。然而，该模型只能接收世界的高度图式化表征：二元变量表示物体在盒子里还是篮子里，或行动者是在盒子里搜索还是在篮子里搜索。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>More sophisticated probabilistic models of agent-based reasoning later made inferences about simple 2D blocks-world scenarios in which schematic agents’ behaviors were observed. These models allowed quantitative predictions across many scenarios and showed good correspondence with human judgments. They again contained explicit representations intended to map to the internal representations posited as part of naive psychology, instantiating the theory that humans reason recursively about others as rational, planning agents. Despite their success, there is no obvious route to generalize them to a broader range of stimuli: their computations operate over 2D blocks worlds, and adaptation to other discrete game-like worlds would require considerable effort.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>后来，更复杂的基于行动者推理的概率模型，能够对简单的二维积木世界场景作出推断，在这些场景中可以观察图式化行动者的行为。这些模型能够对广泛场景作出定量预测，并与人类判断表现出良好对应。它们同样包含显式表征，意在映射到被假定为直觉心理学一部分的内部表征，从而实例化这样一种理论：人类会把他人当作理性的、会规划的行动者，并对其进行递归推理。尽管这些模型很成功，却没有明显途径将它们推广到更广泛的刺激：它们的计算作用于二维积木世界；即便其规划引擎原则上可以应用到其他离散游戏式世界，适配所需努力也相当可观。</p></div>
+      </div>
+
+      <h3>Stimulus Computable Models / 刺激可计算模型</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>None of this is new. Computational models have described many aspects of human cognition, from perception to learning and decision-making, using symbolic representations, neural networks, probabilistic models, and other formalisms. There have been decades of debates about what inferences are licensed by particular types of models. But many of these questions take on new urgency because, unlike previous generations, current models can be applied to a much wider variety of stimuli and situations.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>这些都不是新鲜事。计算模型已经用符号表征、神经网络、概率模型以及其他形式体系，描述了人类认知的许多方面，从知觉到学习再到决策。几十年来，人们一直在争论特定类型的模型允许我们作出哪些推断。但其中许多问题在今天获得了新的紧迫性，因为与前几代模型不同，当前模型可以应用到范围广得多的刺激和情境中。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>We use “stimulus computable” to denote that something like the stimuli humans experience in an experiment can be provided to a model in unmodified form. Sometimes this means giving the model precisely the same texts or images as human participants. Sometimes compromises are needed: transcribing spoken language as text, providing still frames instead of a video, or describing a visual stimulus in words.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>我们使用“刺激可计算”一词，是为了表示：人类在实验中所经历的那类刺激，可以以未修改的形式提供给模型。有时，这意味着把与人类参与者完全相同的文本或图像提供给模型。有时则需要折中：把口语刺激转录为文本，提供视频的静帧而非视频本身，或者用文字描述视觉刺激。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Beyond being stimulus computable, modern AI models have other features that together create a qualitative change in cognitive modeling. They can succeed in a wider variety of perceptual and cognitive tasks, opening new areas for study. They can be trained on large amounts of realistic data—language, images, videos, and other modalities—making it feasible to simulate human learning and development at an unprecedented scale. And because they can be queried through chat interfaces and APIs, they are accessible to a wider range of researchers than ever before.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>除了刺激可计算之外，现代 AI 模型还具有其他特征，这些特征合在一起，使认知建模格局发生了质变。它们能够在更广泛的知觉和认知任务上成功，从而开辟新的研究领域。它们可以在大量真实数据上训练，包括语言、图像、视频以及其他模态，使以前所未有的规模模拟人类学习和发展成为可行。而且，由于可以通过聊天接口和 API 查询这些模型，它们也比以往任何模型都更容易被更广泛的研究者使用。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Yet much is also still the same. When researchers use AI models as cognitive models, they must still decide the scope and limits of the comparison between the human system and the computational system. Is the architecture type, such as a transformer, or the learning rule, such as backpropagation, important to the mapping, or are these details irrelevant to the model’s goals? Is model runtime meant to relate to human reaction time? There is no easy answer; these are part of the messy work of debating the scientific use of specific models.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>然而，许多东西仍然没有改变。当研究者把 AI 模型用作认知模型时，他们仍然必须决定人类系统与计算系统之间比较的范围和边界。模型使用的架构类型（如 transformer）或学习规则（如反向传播）对映射是否重要？还是说，对于某个认知模型的目标而言，这些关键细节可以被视为无关？模型的运行时间是否意在关联人类反应时？这些问题没有简单答案；它们属于围绕具体模型的科学使用展开争论时，那些混乱但必要的工作。</p></div>
+      </div>
+
+      <h3>Modeling Naive Psychology Using LLMs / 用大型语言模型建模直觉心理学</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>In contrast to probabilistic inverse-planning models, LLMs offer a flexible and powerful method for evaluating arbitrary stimuli, allowing them to be applied easily to a wide range of vignettes about naive psychology. One early paper used this opportunity to show that several commercial LLMs succeeded on standard probes of false-belief understanding, which are often taken as a diagnostic for naive psychology more broadly. These successes proved fragile and vignette-specific for at least some models.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>与概率逆向规划模型不同，LLM 提供了一种灵活而强大的方法来评估任意刺激，使其能够很容易地应用于关于直觉心理学的广泛小故事。一篇早期论文利用这一机会表明，若干商业 LLM 在错误信念理解的标准探针上取得成功；这类探针常被视为更广泛直觉心理学能力的诊断指标。至少对某些模型而言，这些成功后来被证明是脆弱的，并且依赖具体小故事。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Inspired partly by this debate, several teams created large sets of vignettes probing different aspects of naive psychology that could be evaluated with both human participants and LLMs. For example, Gandhi et al. used a highly capable LLM to help generate vignettes probing belief- and action-based inferences across many contexts, and then tested other LLMs on those vignettes.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>部分受这一争论启发，多个团队创建了大量小故事，用来探查直觉心理学的不同方面，并且这些材料既可用于人类参与者，也可用于 LLM。例如，Gandhi 等人使用一个能力很强的 LLM，帮助生成跨多种情境的小故事，用以探查基于信念和基于行动的推断，然后用这些小故事测试其他 LLM。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Yet despite the interest of evaluating these models, LLMs are not yet being used as cognitive models in the sense of the earlier probabilistic models. In particular, there is no clear model-mechanism mapping establishing the correspondence between model and target system. No states are identified as corresponding to beliefs or desires; no components of the architecture are investigated for their importance in producing success. No explanations of the behavior are posited. Instead, this work largely treats models as black-box agents whose behavior can be evaluated only by the same techniques used to evaluate human participants.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>然而，尽管评估这些模型本身很有意义，LLM 还没有在早期概率模型的意义上被用作认知模型。特别是，目前还没有明确的模型-机制映射来建立模型与目标系统之间的对应。没有哪些状态被识别为对应信念或欲望；没有哪些架构组件被考察其在产生成功表现中的重要性。也没有对行为提出解释。相反，这一研究路线在很大程度上把模型当作黑箱行动者，其行为只能用评估人类参与者的同样技术来评估。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Creating a model-mechanism mapping for naive psychology is an important next step. It may be productive, for instance, to consider what input data are required to produce psychological abstractions within a model, or to probe whether abstractions emerging in model states parallel those posited in humans. Because interesting psychological reasoning currently emerges only in the largest models, progress will likely require solving technical challenges related to efficient training and probing. Such steps might move us closer to a true cognitive model of naive psychology.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>为直觉心理学创建模型-机制映射，是该文献的重要下一步。例如，考虑产生模型内部心理抽象所需的输入数据，可能是有成效的；探查模型状态中涌现的抽象是否与被假定存在于人类中的抽象平行，也可能有成效。鉴于目前有趣的心理推理只在最大模型中涌现，未来进展很可能需要解决与高效模型训练和探测相关的多种技术挑战。这些步骤也许会使我们更接近真正的直觉心理学认知模型。</p></div>
+      </div>
+    </section>
+
+    <section id="mapping">
+      <h2>Mapping Between Learning Models and Human Systems / 学习模型与人类系统之间的映射</h2>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Computational models in cognitive science are limited mappings between some target part of human cognition and a formal artifact representing that computation. Through comparisons between models, they can also permit inferences about which theoretical assumptions best match the human system. Yet the strength of these inferences is only as strong as the mapping between model and target system.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>认知科学中的计算模型，是人类认知某个目标部分与表征该计算的形式人工物之间的有限映射。通过模型之间的比较，它们也能允许我们推断哪些理论假设最符合人类系统。然而，这些推断的强度，只能与模型和目标系统之间映射的强度一样强。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>In modern stimulus-computable AI models, the mapping between model and human system usually comes down to two issues: model training and model evaluation. We should not be absolutists about requiring a match on either dimension. A model can sometimes be informative even if its data or evaluation mismatches humans dramatically. Goodman et al.’s naive psychology model, for example, used highly schematic inputs; precisely because of that simplicity, it showed that developmental changes in mentalistic reasoning could arise in highly simplified situations.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>在现代刺激可计算 AI 模型中，模型与人类系统之间的映射通常归结为两个问题：模型训练与模型评估。我们不应绝对化地要求在任一维度上完全匹配。即使模型的数据或评估与人类差异很大，它有时仍然能提供信息。例如，Goodman 等人的直觉心理学模型使用高度图式化输入；正是由于这种简单性，它表明心理化推理中的发展变化可以在高度简化的情境中出现。</p></div>
+      </div>
+
+      <h3>Model Training / 模型训练</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>As learning systems, LLMs and other recent AI models critically rely on their training data. To the extent that the modality, distribution, or quantity of the training data does not match the training data received by the target system—human learners—this mismatch can undermine inferences from the model.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>作为学习系统，LLM 和其他近期 AI 模型关键地依赖其训练数据。只要训练数据的模态、分布或数量与目标系统——人类学习者——所接收的训练数据不匹配，这种不匹配就可能削弱从模型得出的推断。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p><strong>Data modality.</strong> If an LLM is used as a cognitive model, the mapping first assumes that language—and text in particular—is the appropriate learning input for the capacity being modeled. In some cases this may be warranted, as in modeling adults’ reading times. In other cases, text-only training data are likely less appropriate. Translating multimodal child-development paradigms into prose, for example, could substantially change the nature of the paradigm.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p><strong>数据模态。</strong>如果将 LLM 用作认知模型，这一映射首先假定语言——特别是文本——是被建模能力的适当学习输入。在某些情况下，这一假设可能有道理，例如建模成人阅读时间。但在其他情况下，仅由文本构成的训练数据可能就不那么合适。例如，把儿童发展研究中的多模态范式翻译成散文式文字，可能会实质性改变范式的性质。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>For models to describe other aspects of cognition well, text alone is likely insufficient. Increasingly, large commercial LLMs provide multimodal capabilities, though there is reason to suspect that these capabilities do not yet reflect human visual cognition. Some cognitive modeling work uses similar multimodal architectures: for example, an image-text model trained on data from human children learned some links between words and images, offering a cognitive model for early associative word learning. Although this is an image-text model rather than a speech-video model, it is still an important step toward multimodal learning in cognitive modeling.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>要让模型良好描述认知的其他方面，单靠文本很可能不够。大型商业 LLM 越来越多地提供多模态能力，尽管我们有理由怀疑这些能力尚未反映人类视觉认知。一些认知建模工作也利用类似的多模态架构。例如，一个在儿童数据上训练的图像-文本模型，能够学习词语与图像之间的某些联系，从而为早期联想式词汇学习提供认知模型。虽然这是图像-文本模型，而不是语音-视频模型，但它仍然是将多模态学习用于认知建模的重要一步。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p><strong>Data distribution.</strong> Ideally, a cognitive model would be trained on the same kind of data humans receive. Children largely learn from grounded conversations appropriate to their developmental level, while adults’ language diet mixes spoken and read text. Large pretrained LLMs, in contrast, are trained mostly on Internet text, which has no intrinsic curriculum or ordering. This mismatch may be problematic for modeling child language learning or adult language processing.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p><strong>数据分布。</strong>理想情况下，认知模型应当在与人类所接收数据同类的数据上训练。儿童主要从有情境依托、适合其发展水平的对话中学习；成人的语言摄入则混合了口语和阅读文本。相比之下，大型预训练 LLM 主要在互联网文本上训练，而这些文本没有内在课程或顺序。这种数据分布的不匹配，可能会给建模儿童语言学习或成人语言加工带来问题。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>A cognitive model can also be useful by mapping features of human training data to features of model training data. In this strategy, the causal explanations concern properties of the data themselves, for example, whether a particular data property is required for a capacity to emerge. In reasoning studies, researchers have modified higher-order statistics in data distributions to show that only some distributions give rise to chain-of-thought reasoning. Computer vision also shows strong distribution effects: ImageNet’s uniform category sampling differs radically from children's visual experience; models trained on more developmentally realistic distributions perform substantially worse, indicating a mismatch between their architectures and human learning architectures.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>认知模型也可以通过在人类训练数据特征与模型训练数据特征之间建立映射而发挥作用。在这种策略中，模型所支持的因果解释涉及数据本身的属性，例如某一特定数据属性是否是某种能力涌现所必需的。推理研究中，研究者曾修改数据分布中的高阶统计特征，显示只有某些分布会产生链式思维推理。计算机视觉也显示出强烈的数据分布效应：ImageNet 按类别均匀采样的方式，与儿童视觉经验截然不同；当视觉模型在发展上更真实的视觉数据分布上训练时，表现显著更差，这表明其架构与人类学习架构之间存在不匹配。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p><strong>Data quantity.</strong> The successes of LLMs and other modern AI models have required vastly more training data than humans receive. GPT-3, arguably the first model to show human-like in-context reasoning, was trained on roughly 400 billion words, while human children likely receive fewer than 10 million words per year. Since in-context reasoning and other abilities emerge relatively early in children, there is likely a data gap of many orders of magnitude between the input required for AI models and the input received by children. Data quantity is therefore a key disanalogy in using AI models as cognitive models.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p><strong>数据数量。</strong>LLM 和其他现代 AI 模型的成功，依赖于远超人类所接收数量的训练数据。GPT-3 可以说是第一个显示出类人语境内推理能力的模型，它大约在 4000 亿词上训练；而人类儿童每年可能接收少于 1000 万词。由于语境内推理以及其他能力在儿童身上相对早期就会出现，训练 AI 模型所需输入与儿童所需输入之间很可能存在多个数量级的数据差距。因此，数据数量是在将 AI 模型用作认知模型时，一个关键的非类比点。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en caption"><p class="label">English figure caption</p><p><strong>Figure 2.</strong> Data efficiency in human learning. Panel (a) shows the order of magnitude of LLM versus human training data by human age. Panel (b) schematically depicts evaluation scaling curves for human learners versus models, plotted by training data quantity.</p></div>
+        <div class="cell zh caption"><p class="label">中文图注</p><p><strong>图 2。</strong>人类学习中的数据效率。图（a）按人类年龄绘制大型语言模型与人类训练数据数量级的差异。图（b）以训练数据数量为横轴，示意性地描绘人类学习者与模型的评估扩展曲线。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>To make the data gap more precise, model and human performance must be measured in comparable ways so human development can be compared with model scaling. For some aspects of cognition, model performance appears to scale with data much more slowly than human performance, but this hypothesis must be tested quantitatively across domains. The BabyLM challenge is a notable example: researchers train AI models on a small fixed data set, canonically 100 million words, to explore what can emerge from human-scale training corpora. These systems are not usually presented as cognitive models, but they lay groundwork for systematic comparisons among models trained at a human-relevant scale.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>要更精确地刻画这种数据差距，我们需要用可比较的方式测量模型和人类表现，使人类发展能够与模型规模扩展进行比较。对于认知的某些方面，模型表现似乎随数据增长而提升得比人类慢得多，但这一假设必须在多个领域中定量检验。BabyLM 挑战是一个值得注意的例子：研究者在一个小型固定数据集上训练 AI 模型，标准规模通常为 1 亿词，以探索在人类尺度训练语料上能够涌现什么。这些系统通常并不被提出为认知模型，但它们为在同一人类相关数据规模上训练的模型之间进行系统比较奠定了基础。</p></div>
+      </div>
+
+      <h3>Model Evaluation / 模型评估</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Cognitive models are evaluated by their relationship to target phenomena, but the evaluation can vary widely. The simplest method is to identify qualitative patterns in human behavior and ask whether they emerge in models. Modern stimulus-computable AI models offer richer quantitative evaluation options, while also creating more opportunities for mismatch between human and model evaluation.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>认知模型根据其与目标现象的关系来评估，但评估方式差异很大。最简单的方法是识别人类行为中的定性模式，并询问这些模式是否也在模型中出现。现代刺激可计算 AI 模型提供了更丰富的定量评估选项，同时也创造了更多人类评估与模型评估之间不匹配的机会。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>For example, LLMs can be asked to make explicit grammaticality judgments and those judgments can be compared with human judgments. One comparison found mismatch, potentially suggesting that LLMs should not be used as theoretical tools for human language processing. But the inference appears connected to the evaluation method: when grammaticality was assessed by comparing minimal pairs, the metric fit human acceptability judgments strongly. This illustrates a broad challenge in cognitive model evaluation.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>例如，可以要求 LLM 对句子作出显式语法性判断，并将这些判断与人类判断比较。一项比较发现二者不匹配，可能暗示 LLM 不应被用作研究人类语言加工的理论工具。但这一推断似乎与模型评估方法有关：当语法性通过最小句对比较来评估时，该指标与人类可接受性判断高度拟合。这个例子说明了认知模型评估中的一类广泛挑战。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Methods of “machine psychology” should often follow best practices for human research in measurement, experimental design, and stimulus creation. Measures derived from models matter. Prompting models to generate explicit judgments can align model and human tasks, but it can also have weaknesses. Just as human explicit and implicit judgments are not always aligned, prompt-based model judgments can underestimate latent knowledge. Raw next-word probabilities can sometimes provide a more accurate measure of what LLMs “know,” especially for smaller, more realistic cognitive models where prompt-based and probability-based evaluations diverge more strongly.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>“机器心理学”的方法通常应当遵循人类研究在测量、实验设计和刺激创建方面的最佳实践。从模型中导出的测量指标很重要。通过提示让模型生成显式判断，可以使模型任务与人类任务对齐，但这种方法也可能有显著弱点。正如人类的显式判断和隐式判断并不总是一致，基于提示的模型判断也可能低估模型的潜在知识。原始的下一个词概率有时能更准确地测量 LLM “知道”什么；对于更小、更现实的认知模型尤其如此，因为在这类模型中，基于提示的评估与基于概率的评估之间的差异往往更大。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Researchers must not only derive measures from models but compare them with other measures. This comparison requires a linking hypothesis: a hypothesis about how model-derived metrics correspond to human decisions. Common linking hypotheses include softmax choice rules for forced choices and surprisal to simulate reaction times. Prompt-based evaluations may seem to offer a transparent linking hypothesis—model responses are simply correlated with human judgments—but this may not be optimal. Human experiments often use forced-choice judgments or implicit measures such as reaction time rather than open-ended language generation, and models should predict these dependent measures too.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>研究者不仅必须从模型中导出特定测量，还必须将其与其他测量比较。这种比较需要一个连接假设（linking hypothesis）：即关于模型导出指标如何对应人类决策的假设。认知建模中常见的连接假设包括：用 softmax 选择规则模拟备选项之间的强迫选择，用 surprisal 模拟反应时。基于提示的评估似乎提供了一个透明的连接假设：模型反应只需与人类判断相关即可。但这种策略未必最优。实验常常通过强迫选择判断或反应时等隐式测量来测量人类参与者，而不是要求他们执行开放式语言生成任务；我们的模型也应当预测这些因变量。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Effective cognitive modeling requires experimental designs that use specific manipulations to make causal inferences. Standard machine-learning benchmarks focus on performance, but they usually do not permit scientific inference about why one model differs from another, because major model families differ simultaneously in architecture, training data, and size. Controlled contrasts between variants of the same model, such as ablations, are common in machine learning but have sometimes been missing in the rush to use LLMs for cognitive modeling. Stronger stimulus-based experiments also require minimal changes between conditions; otherwise differences in length or other characteristics confound the comparison.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>有效的认知建模需要实验设计，利用特定操纵来进行因果推断。标准机器学习基准关注模型在某项任务上的表现，但通常无法支持关于为什么一个模型与另一个模型表现不同的科学推断，因为主要模型家族往往同时在架构、训练数据和大小上存在差异。同一模型变体之间的受控对比，例如消融实验，在机器学习中很常见，但在仓促采用 LLM 探索认知建模的过程中，有时因为重训模型的技术障碍而缺失。更强的基于刺激的实验也要求条件之间进行最小改动；否则长度或其他特征差异会混淆条件比较。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Validity must also be assessed. In psychology, validity is the degree to which a measure measures the construct it is supposed to measure. A naive psychology benchmark that also requires solving equations would measure not only naive psychology but mathematical ability. Validity threats are often less obvious, especially when the construct itself is not well understood. If two social-reasoning assessments do not cluster together across models, this could indicate problems in one or both assessments, or differences in the construct’s structure in the models. The careful investigator must use converging methods to examine robustness.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>还必须评估测量效度。在心理学中，测量效度指的是一个测量在多大程度上测到了它应当测量的构念。一个还要求解数学方程的直觉心理学基准，测到的就不只是直觉心理学能力，也包括数学能力。效度威胁往往没这么明显，尤其当所测构念本身结构未知时更是如此。如果两个表面上都测量社会推理的评估，在不同模型之间并不聚合在一起，这可能表明其中一个或两个评估存在问题，也可能表明该构念在模型中的结构有所不同。谨慎的研究者唯一能做的，是尝试用会聚方法研究理论主张的稳健性。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>One validity concern deserves special mention: data contamination. Experimental evaluation must avoid reusing materials likely to be in the training data, because descriptions of those materials in the scientific literature are likely accompanied by normative or descriptive answers that bias model evaluation. Given the vast data used by pretrained language models, this risk is real. Almost any stimulus found in published literature is likely to be present in training corpora. The key question is how much materials must be modified to provide a true test of generalization. In naive psychology, close generalizations of existing vignettes tend to produce successes, while more creative or novel problems produce mixed results. If responses depend on the specific questions, or very similar ones, being present in training data, the assessment’s validity is compromised.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>有一个效度问题尤其值得特别指出：数据污染。任何实验评估都必须避免重复使用很可能已经在训练数据中的材料，因为科学论文中对这些材料的描述，很可能伴随着规范性或描述性答案，从而偏倚模型评估。鉴于预训练语言模型使用的数据极其庞大，这一风险非常真实：几乎任何出现在已发表文献中的刺激，都很可能存在于训练语料中。关键问题是：材料必须修改到什么程度，才能提供真正的泛化测试。直觉心理学文献给出了有用启示：对已有小故事作相对接近的泛化，往往会产生成功结果；而更有创造性或更新颖的问题，则产生更混合的结果。只要模型反应依赖于训练数据中存在这些具体问题或非常相似的问题，该评估的效度就会受损。</p></div>
+      </div>
+    </section>
+
+    <section id="other">
+      <h2>Other Theoretical Contributions of AI Models / AI 模型的其他理论贡献</h2>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Not every AI model is a cognitive model; most are not. Although cognitive models play a privileged role in advancing theoretical understanding, AI can help in many other ways, some of which may serve as stepping stones to cognitive models. Three such contributions are machine research assistants, human simulators, and examples of other minds.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>并非每个 AI 模型都是认知模型；多数都不是。虽然认知模型在推进理论理解方面具有特殊地位，AI 还可以通过许多其他方式提供帮助，其中一些可能成为通往认知模型的踏脚石。这里讨论三种贡献：机器研究助理、人类模拟器，以及作为其他心智样本。</p></div>
+      </div>
+
+      <h3>Machine Research Assistants / 机器研究助理</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Because AI systems can process images and text and interact in other ways, they hold great promise for enhancing research on human cognition as machine research assistants, replacing human effort in categorizing and annotating images, drawings, or language productions. They can also serve as machine confederates in experimental studies, allowing controlled interactions as part of a protocol.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>由于 AI 系统能够处理图像和文本，并以其他方式交互，它们作为机器研究助理，在增强人类认知研究方面很有前景：它们可以替代人类在图像、绘画或语言产物分类与标注上的劳动。它们也可以在实验研究中充当机器同谋者，使受控互动成为实验方案的一部分。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Generative AI can create verbal and visual stimuli at scales otherwise unwieldy or too costly, such as illustrations or vignettes. AI can also analyze text, image, or video data, such as extracting features of drawings, computing conversation similarity, or identifying face locations. These tasks might require hundreds or thousands of hours of human effort and would otherwise be practically impossible. But models, like human annotators, are imperfect instruments; their accuracy must be assessed and communicated. Interrater reliability and manipulation checks are two relevant methods.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>生成式 AI 可以以原本笨重或成本过高的规模，创建语言和视觉刺激，例如插图或小故事。AI 也可以分析文本、图像或视频数据，例如提取绘画特征、计算对话相似性、或识别人脸位置。这些任务常常需要数百乃至数千小时的人类劳动，没有模型协助在实践上可能不可行。但模型与人类标注者一样，都是不完美的工具；必须评估并报告它们在标注任务上的准确性。评定者间一致性以及生成刺激中的操纵检查，是与前述构念效度工作相关的两种方法。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>The use of models as confederates can also create opportunities for new studies of human cognition. Often, AI interventions are explicitly marked as coming from AI. For example, language models can generate consensus statements summarizing group discussions of controversial political issues, or even reduce beliefs in conspiracies.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>把模型用作实验同谋者，也能为人类认知的新研究创造机会。通常，来自 AI 模型的干预会被明确标示为 AI。例如，语言模型可以生成共识陈述，总结关于有争议政治议题的小组讨论，甚至可以降低人们对阴谋论的信念。</p></div>
+      </div>
+
+      <h3>Human Simulators / 人类模拟器</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Because AI models are stimulus computable, they can be used to predict human responses to experimental items even without a specific theory explaining why they do so. Early work showed that GPT-3.5 reproduced human moral judgments with surprising accuracy, raising the possibility that models could substitute for human participants in some applications, such as pilot testing materials. The technique has since succeeded across domains from social science to neuroscience. Cognitive models are important for both prediction and explanation; human simulators primarily focus on prediction alone.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>由于 AI 模型是刺激可计算的，它们可以用来预测人类对实验项目的反应，即便没有具体理论解释为什么能做到。早期研究显示，GPT-3.5 以惊人的准确性复现了人类道德判断，由此提出一种可能：在某些应用中，模型可以替代人类参与者，例如用于实验材料的预试。此后，这一技术在从社会科学到神经科学的多个领域都取得成功。认知模型对预测和解释都很重要；人类模拟器主要只关注预测。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Pure prediction of human behavior can nevertheless be important. For example, experimental effect sizes can be predicted from nationally representative survey experiments based on evaluations of their stimuli. This opens new avenues for identifying successful interventions efficiently, such as running in silico pilot evaluations and then testing only interventions predicted to yield large effects.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>尽管如此，对人类行为的纯预测仍可能具有重要意义。例如，可以基于对刺激的评估，预测全国代表性调查实验中的实验效应大小。这为更高效地识别成功干预开辟了新途径，例如先进行计算机内预试评估，再只测试那些被预测会产生大效应的干预。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Prediction of human responses can also be a stepping stone toward cognitive modeling. Centaur, for example, is a pretrained LLM fine-tuned on trial-by-trial data from a large corpus of cognitive psychology studies. Although the base model is already impressive at predicting participant choices, the fine-tuned model performs better on held-out trials and outperforms domain-specific cognitive models. The authors argue that accurate prediction is the first part of a unifying model of human cognition, and show that model representations become more aligned with human neural representations after fine-tuning. These results are exciting, but it is surprising that a model of human cognition might begin with an artifact pretrained on 15 trillion tokens, essentially incorporating an approximation of the cultural production of billions of people.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>预测人类反应也可以成为通向认知建模的踏脚石。例如，Centaur 是一个预训练 LLM，在来自大量认知心理学研究的逐试次数据上进行微调。虽然基础模型在预测参与者选择方面已经令人印象深刻，但微调模型在留出试次上的准确性更高，并显著超过文献中的领域特定认知模型。作者认为，这种准确预测是创建人类认知统一模型的第一部分，并显示模型表征在行为实验数据上微调后，与人类神经表征更加对齐。这些结果令人兴奋；但直觉上也令人惊讶：一个人类认知模型竟可能从一个在 15 万亿 token 上预训练的人工物开始，而这实际上纳入了数十亿人的完整文化产出的近似。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Human simulators are pragmatically useful and theoretically interesting, but despite impressive predictive success they provide limited explanatory traction. Deepening them will require layering further mappings to the human system—to representations, architectures, or even data—beyond a simple match in behavior.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>人类模拟器在实践上有用，在理论上也有趣；但尽管其预测成功令人印象深刻，它们提供的解释牵引力仍然有限。要深化这些系统，需要在简单的行为匹配之外，叠加更多通向人类系统的映射：通向表征、架构，甚至数据的映射。</p></div>
+      </div>
+
+      <h3>Other Minds / 其他心智</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Comparative studies of animal intelligence have long provoked reflection on intelligence. Octopuses show adaptive behavior emerging from a distributed system within an organism; ants and social insects show intelligent behavior at the level of networks of organisms. These examples suggest that centralized reasoning and cognition need not be the only route to adaptive problem solving, broadening our appreciation of the diversity of routes to intelligence. AI can serve the same purpose.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>动物智能的比较研究长期以来激发了人们对智能含义的反思。章鱼展示出从个体有机体内部的分布式系统中涌现的适应性行为；蚂蚁和其他社会性昆虫则在有机体网络层面展现智能行为。这些例子表明，集中式推理和认知并不一定是适应性问题解决的唯一路径，从而拓宽了我们对通向智能之多样路径的理解。AI 也可以发挥同样作用。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Cognitive scientists have long used technical artifacts, from telegraphs to computers, as comparative prompts for thinking about human intelligence. Systems that play chess or checkers show impressive behavior but little resemblance to human mechanisms, suggesting again that seemingly intelligent behavior can be produced by very different algorithms. The strongest possible outcome of such comparisons would be universal hypotheses about intelligent systems.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>长期以来，认知科学家一直借助从电报到计算机的技术人工物，作为思考人类智能的比较性提示。下棋或跳棋系统展现出令人印象深刻的行为，但其机制与人类被认为如何下棋的机制相似性有限；这再次表明，看似智能的行为可以由非常不同的算法产生。跨智能空间进行比较，最强可能结果将是关于智能系统的普遍假设。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>One line of work concerns comparative case studies of convergence in intelligent behavior. Marr described analyzing problems faced by minds and brains at a computational level, considering how a problem can be solved given the available information. Simon similarly emphasized characterizing agents by the interfaces between their environments and goals, independent of the exact mechanisms carrying out the computation. If an organism solves a hard problem, one can learn about how it happens by examining any system smart enough to solve that problem. Perhaps as organisms or systems become more intelligent, they converge on similar representations.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>其中一条研究路线，是关于智能行为趋同的比较案例研究。Marr 曾描述在计算层面分析心智与大脑所面对的问题，即只考虑在可用信息给定的情况下，一个问题如何能够被解决。Simon 也类似地强调，通过行动者的环境与目标之间的接口来刻画行动者，而不管执行计算的精确机制是什么。如果一个有机体解决了某个困难问题，那么研究任何足够聪明、能够解决该问题的系统，都可以让我们了解这个问题如何被解决。也许随着有机体或系统变得更智能，它们会趋向相似的表征。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>A current example is formal and mathematical reasoning in LLMs. Without specialized training, large pretrained language models generally struggle on mathematical reasoning tests. Recent innovations have improved performance on mathematics and reasoning assessments, and these reasoning models are already being compared with humans. Strategies that facilitate reasoning for both language models and humans are more likely to be general than strategies found only in humans. It is too soon to know whether reasoning models make good cognitive models; their training data differ greatly from human data. Yet, like octopuses, they are interesting prompts for speculation about intelligence.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>当前一个例子，是 LLM 中的形式推理和数学推理。没有专门训练时，大型预训练语言模型通常在数学推理测试上表现困难。近期多种创新提高了模型在数学任务和其他推理评估中的表现，这些推理模型已经开始与人类比较。那些对语言模型和人类都有助于推理的策略，比只在人类身上发现的策略更可能是一般性的。现在判断推理模型是否是良好认知模型还为时过早；它们接收的训练数据类型和数量都与人类差异很大。然而，作为我们最有能力的推理建模方法，它们像章鱼一样，是关于智能本质的有趣思辨提示。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>A special case of AI as other minds is proof-of-concept learning. In linguistics, the poverty-of-the-stimulus argument claims that some aspects of grammar cannot be learned from linguistic input without innate assumptions or biases. Because modern LLMs have relatively flexible and general assumptions about their data, their success in producing grammatical language is a prima facie challenge to such arguments. The challenge does not depend on any specific mapping to human cognition: if language can be learned by any system, then it is learnable in principle.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>将 AI 作为其他心智的一种特殊情况，是概念验证式学习。在语言学中，贫乏刺激论证声称，自然语言结构的某些方面，特别是语法结构，无法仅从语言输入中学到，除非存在某种先天假设或偏置。由于现代 LLM 对其观察数据只有相对灵活而一般的假设，它们成功生成合乎语法的语言，从表面上挑战了贫乏刺激论证。这一挑战并不依赖于 LLM 与人类认知之间的任何特定映射：如果语言能被任何系统学会，那么原则上它就是可学的。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>LLMs can also be used for more specific proof-of-concept demonstrations: special-purpose models can be trained on corpora lacking particular constructions and later probed on those constructions, or models can be compared on human languages versus impossible variants to test whether possible human languages are generally easier to learn. These demonstrations exploit general learning prowess to ask about learnability in principle, rather than about a specific human system. Even if LLMs are poor cognitive models of language learning, they can defeat prior in-principle unlearnability arguments and serve as first steps toward more specific hypotheses about how humans solve difficult problems.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>LLM 还可用于更具体的概念验证式学习演示：可以在缺少特定结构的语料上训练专用 LLM，然后探测模型对这些结构的判断；也可以比较模型学习人类语言与不可能语言变体的表现，以检验可能的人类语言是否具有一般上更容易学习的结构。这些演示创造性地利用模型的一般学习能力，询问原则上可学习性的问题，而不是询问某个特定人类系统的问题。即使 LLM 是糟糕的人类语言学习认知模型，它们也能击败先前原则上的不可学习性论证，并且常可成为进一步检验人类如何解决困难问题的更具体假设的第一步。</p></div>
+      </div>
+    </section>
+
+    <section id="challenges">
+      <h2>Challenges, Opportunities, and Conclusion / 挑战、机会与结论</h2>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>The field of cognitive modeling in the age of stimulus-computable models faces challenges and opportunities involving reproducibility, generalizability, and interpretability.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>在刺激可计算模型时代，认知建模领域面临的挑战与机会，涉及可复现性、可推广性和可解释性。</p></div>
+      </div>
+
+      <h3>Transparency and Reproducibility / 透明性与可复现性</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Scientific theories cannot be secrets. For a theory to be accepted by a scientific community, it must be shared. When a theory consists of a few equations or a verbal description, this is tautological. But when a theoretical artifact consists of an architecture specified in code and trained on many millions or billions of tokens, transparency and accessibility are far from assured.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>科学理论不能是秘密。一个理论要被科学共同体接受，就必须能在共同体中共享。当一个理论由少数方程或一段言语描述构成时，这几乎是同义反复。但当一个理论人工物由代码指定的架构构成，并在数百万乃至数十亿 token 的数据集上训练时，透明性和可访问性就远非确定。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>The key property for theoretical artifacts is reproducibility. Independent investigators must be able to carry out the same computations and observe the same result. Reproducibility is not assured even in simple data analysis and is more limited in complex pipelines; problems are severe in AI and machine learning. For work to be reproducible in principle, researchers must share code, data, and details of the computational environment, even if true reproduction may be difficult because of computational constraints.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>理论人工物的关键属性是可复现性。独立研究者必须能够执行相同计算，并观察到相同结果。即便在简单实验数据分析中，可复现性也并不总能保证；在更复杂的管线中，它更加受限；在 AI 和机器学习中，可复现性问题尤为严重。要使这类工作在原则上可复现，即使真正复现可能受计算资源约束，研究者也必须共享代码、数据以及训练完成时的计算环境细节。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Many studies compare human behavior with GPT-family models. Although many are interesting, GPT-3, GPT-4, and successors are not suitable foundations for building theories. Because they are industrial products, key architectural features are unknown, training data and training details are private, and access is via API endpoints. There is no guarantee that any result using these models can be reproduced in the future. With the rise of open-access LLMs, researchers interested in scientific uses of AI should choose open models despite the convenience of commercial APIs.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>许多实验研究将人类行为与 GPT 系列模型进行比较。尽管其中很多研究很有趣，GPT-3、GPT-4 及其后继模型并不适合作为建构理论的基础。由于这些模型是工业产品，其架构关键特征未知，训练数据和训练细节私有，并且只能通过 API 端点访问。因此，无法保证任何使用这些模型得到的结果在未来可以复现。随着开放访问 LLM 的兴起，尽管商业 API 很方便，对 AI 科学用途感兴趣的研究者仍应选择开放模型。</p></div>
+      </div>
+
+      <h3>Population Generalizability / 群体可推广性</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Theories in psychology and cognitive science must explain not only consistency between individuals but also variability. Yet most cognitive modeling, both older traditions and current AI-based work, has focused on predicting average patterns of human performance. Such averages can be problematic because they are often taken from online convenience samples and are not estimates for any particular population.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>心理学和认知科学中的理论不仅必须解释个体之间的一致性，也必须解释变异性。然而，无论是既有传统还是当前基于 AI 的工作，绝大多数认知建模都集中在预测人类表现的平均模式。这些平均值可能很有问题，因为它们通常来自在线便利样本，并不是任何特定群体的估计。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>A match between AI models and human data must be interpreted in light of the sources of both. Most LLM training data come from the Internet, which overrepresents particular languages, cultures, topics, and writing modes. These biases lead models to represent the knowledge and attitudes of a subset of human experiences, especially English speakers with Internet access. Much more work is needed to understand how models reflect variability across individuals and cultures. Fine-tuning models on detailed language data from diverse individuals may produce better human simulators, but each fine-tuned artifact still contains an Internet’s worth of training data. Whether similar approaches can work for cognitive models trained on human-scale data remains open.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>AI 模型与人类数据之间的匹配，必须结合二者来源来解释。大多数 LLM 的训练语言数据来自互联网，而互联网极大地过度代表了特定语言、文化、话题和书写方式。这些采样偏差导致模型表征的是人类经验的某个子集的知识和态度，尤其是有互联网接入的英语使用者。要理解模型在多大程度上能反映个体间和文化间的变异，还需要大量工作。一个有希望的研究方向，是基于来自不同背景个体的深入语言数据微调模型；这种方法能产生更好的行为模拟器，但每个微调后的模型人工物仍然包含了整整一个互联网规模的训练数据。类似方法能否用于在人类尺度、来源多样的数据上训练认知模型，仍有待观察。</p></div>
+      </div>
+
+      <h3>Interpretability / 可解释性</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>A classic challenge to using neural networks as cognitive models is that they are black boxes whose internal states cannot be interpreted. Modern models have millions or billions of parameters, making exploratory analysis of their representations far harder than in the first wave of connectionism. Yet new tools allow cognitive modelers to connect internal representations with posited mechanisms, including mappings to neural representations and increasingly to cognitive representations.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>将神经网络用作认知模型的一个经典挑战，是它们被认为是黑箱，其内部状态难以解释。现代模型至少有数百万参数，往往还有数十亿参数，使得对其表征进行探索性数据分析，比第一波联结主义时期困难得多。然而，新工具使认知建模者能够在内部表征与被假定机制之间建立联系，包括将模型映射到神经表征，并且越来越多地映射到认知表征。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Internal model representations can predict neural representations. In vision, early work showed that models performing better on image categorization also had representations better matching human functional activation. This result has been replicated across modalities and domains including vision, audition, and language; neural prediction is now well established enough to have leaderboards and competitions. Mechanistic interpretability tools can also help create cognitive mappings, for example by probing for syntactic categories and structures or discovering cognitively interpretable structures with sparse autoencoders.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>模型内部表征可以用于预测神经表征。在视觉领域，早期研究显示，图像分类表现更好的模型，其表征也更匹配人类功能激活。这一一般结果已经在视觉、听觉和语言等多种神经模态和领域中得到重复；网络状态与神经数据之间的映射已经稳固到可以设立排行榜，并让模型参加特定领域的竞赛。机制可解释性工具也越来越能帮助创建认知映射，例如探查语言模型中是否存在句法范畴和结构，或用稀疏自编码器发现大型语言模型中认知上可解释的结构。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Interpretability techniques usually identify whether some structure is present in model representations. Given the number of parameters, it is not surprising that information related to certain representations may be present somewhere; but it may not play any causal role in computation. Causal probing techniques address this by interrogating the computational role of specific representations. They can ask, for example, which of several hypothetical symbolic computations a very large language model approximates on a task. Applied to cognitive models, these techniques may help reveal the computations networks carry out.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>可解释性技术通常识别模型表征中是否存在某种结构。考虑到大多数现代网络参数数量巨大，与某些表征相关的信息以某种形式存在于模型中并不令人意外；但这种信息很可能存在，却不在网络计算中发挥任何因果作用。为了解决这一问题，因果探测技术允许研究者询问特定表征在计算中的作用。例如，这些技术可以用于询问，一个非常大的语言模型在某项任务上近似的是若干假想符号计算中的哪一种。将这些技术应用于认知模型，为理解网络实际执行的计算提供了令人兴奋的潜在工具。</p></div>
+      </div>
+
+      <h3>Conclusion / 结论</h3>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Progress in cognitive science requires theories that can explain and predict human behavior. Computational models are our best tools for instantiating these theories explicitly and connecting them to data. Because behavior is diverse, variable, and environmentally conditioned, such models must operate over a wide range of stimuli and training data. Because of the flexibility and power of modern AI models, they open many exciting opportunities to create stimulus-computable cognitive models—models that can make predictions about human behavior across an arbitrarily large and realistic set of stimuli.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>认知科学的进步需要能够解释并预测人类行为的理论。计算模型是我们用来明确实例化这些理论并将其连接到数据的最佳工具。由于人类行为多样、可变，并且受环境条件制约，这些模型必须能够作用于广泛的刺激和训练数据。由于现代 AI 模型的灵活性和能力，它们打开了许多令人兴奋的机会，使我们能够创建刺激可计算的认知模型——这些模型可以在任意庞大且现实的刺激集合上预测人类行为。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>Taking advantage of this opportunity requires careful thinking about what makes an AI model a scientific model. A thoughtful model-mechanism mapping is the first step, aligning model training and evaluation with a particular aspect of human cognition. The goal of this alignment is not exact matching; some of the best models are substantial simplifications of their target systems. But the validity of a model rests on evaluating this alignment. If the assumptions of the mapping are incorrect, predictions from the model will be incorrect and theoretical inferences will be undermined.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>要利用这一机会，就必须认真思考：究竟是什么使一个 AI 模型成为科学模型。审慎的模型-机制映射是第一步，它把模型训练和评估与人类认知的某个特定方面对齐。正如前文强调，这种对齐的意图不是提供精确匹配；一些最好的模型是对其目标系统的实质性简化。然而，模型的效度取决于对这种对齐的评估。如果映射的假设是错误的，那么来自模型的预测也将是错误的，理论推断也会被削弱。</p></div>
+      </div>
+      <div class="pair">
+        <div class="cell en"><p class="label">English</p><p>This is an exciting time. Many of the dreams envisioned by the founders of cognitive science have become reality. As they envisioned, the fusion of AI with psychology and linguistics yields the potential for new insights into the nature of the human mind.</p></div>
+        <div class="cell zh"><p class="label">中文</p><p>这是一个令人兴奋的时代。认知科学创始人曾经设想的许多梦想已经成为现实。正如他们所设想的那样，AI 与心理学、语言学的融合，有潜力为我们理解人类心智的本质带来新的洞见。</p></div>
+      </div>
+
+      <p class="license">Attribution: Frank, M. C., & Goodman, N. D. (2026). <em>Cognitive Modeling Using Artificial Intelligence</em>. Annual Review of Psychology, 77, 543-566. DOI: 10.1146/annurev-psych-030625-040748. Original article licensed under Creative Commons Attribution 4.0 International License.</p>
+    </section>
+  </main>
+
+  <script>
+    const buttons = document.querySelectorAll("[data-view]");
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        document.body.dataset.view = button.dataset.view;
+        buttons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+      });
+    });
+  </script>
+</body>
+</html>
